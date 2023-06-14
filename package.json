@@ -2,7 +2,7 @@
   "publisher": "ririd",
   "name": "packages",
   "displayName": "packages",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "private": true,
   "packageManager": "pnpm@8.6.0",
   "description": "Helps JavaScript developers managing dependencies with package.json.",
@@ -82,7 +82,7 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --external vscode",
+    "build": "tsup src/index.ts --external vscode && npm run patch",
     "dev": "nr build --watch",
     "lint": "eslint .",
     "vscode:prepublish": "nr build",
@@ -90,10 +90,8 @@
     "pack": "vsce package",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
-    "release": "bumpp && nr publish"
-  },
-  "dependencies": {
-    "node-gyp": "9.4.0"
+    "release": "bumpp && nr publish",
+    "patch": "esno scripts/patch.ts"
   },
   "devDependencies": {
     "@npmcli/config": "^6.1.3",
