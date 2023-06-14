@@ -1,8 +1,8 @@
 {
   "publisher": "ririd",
-  "name": "ext-name",
-  "displayName": "ext-name",
-  "version": "0.0.0",
+  "name": "packages",
+  "displayName": "packages",
+  "version": "0.0.1",
   "private": true,
   "packageManager": "pnpm@8.6.0",
   "description": "",
@@ -16,7 +16,14 @@
   "bugs": {
     "url": "https://github.com/Daydreamer-riri/ext-name/issues"
   },
+  "keywords": [
+    "node",
+    "npm",
+    "javascript",
+    "json"
+  ],
   "categories": [
+    "Programming Languages",
     "Other"
   ],
   "main": "./dist/index.js",
@@ -28,8 +35,52 @@
     "vscode": "^1.69.0"
   },
   "activationEvents": [
-    "onStartupFinished"
+    "onLanguage:json",
+    "workspaceContains:package.json"
   ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "packages.replaceVersion",
+        "title": "Do not call manually ! Replace Version of the provided dependency",
+        "category": "🎈 Packages"
+      },
+      {
+        "command": "packages.updateAll",
+        "title": "Update All dependencies of the package.json",
+        "category": "👆 Packages"
+      },
+      {
+        "command": "packages.retry",
+        "title": "Retry to fetch package.json",
+        "category": "🎈 Packages"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Packages",
+      "properties": {
+        "packages.errorDecorator": {
+          "type": "string",
+          "scope": "resource",
+          "default": "❗️❗️❗️",
+          "description": "The text to show when a dependency has errors."
+        },
+        "packages.incompatibleDecorator": {
+          "type": "string",
+          "scope": "resource",
+          "default": "❌ ${version}",
+          "description": "The text template to show when a dependency is not semver compatible. ${version} will be replaced by the latest version info."
+        },
+        "packages.compatibleDecorator": {
+          "type": "string",
+          "scope": "resource",
+          "default": "✅",
+          "description": "The text template to show when a dependency is semver compatible. ${version} will be replaced by the latest version info."
+        }
+      }
+    }
+  },
   "scripts": {
     "build": "tsup src/index.ts --external vscode",
     "dev": "nr build --watch",
@@ -42,14 +93,18 @@
     "release": "bumpp && nr publish"
   },
   "devDependencies": {
+    "@npmcli/config": "^6.1.3",
     "@ririd/eslint-config": "^0.5.1",
     "@types/node": "^18.15.11",
+    "@types/pacote": "^11.1.5",
     "@types/vscode": "^1.77.0",
     "bumpp": "^9.1.0",
     "eslint": "^8.37.0",
     "esno": "^0.16.3",
+    "pacote": "^15.2.0",
     "pnpm": "^8.1.1",
     "rimraf": "^5.0.1",
+    "semver": "^7.5.1",
     "tsup": "^6.7.0",
     "typescript": "^5.0.3",
     "vite": "^4.2.1",

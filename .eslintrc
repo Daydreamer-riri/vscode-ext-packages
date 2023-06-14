@@ -1,3 +1,6 @@
 {
-  "extends": "@ririd"
+  "extends": "@ririd",
+  "rules": {
+    "no-console": "off"
+  }
 }
