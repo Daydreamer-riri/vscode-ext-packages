@@ -27,7 +27,7 @@
     "Other"
   ],
   "main": "./dist/index.js",
-  "icon": "res/icon.png",
+  "icon": "res/logo.png",
   "files": [
     "dist"
   ],
@@ -97,7 +97,7 @@
     "@ririd/eslint-config": "^0.5.1",
     "@types/node": "^18.15.11",
     "@types/pacote": "^11.1.5",
-    "@types/vscode": "^1.77.0",
+    "@types/vscode": "^1.69.0",
     "bumpp": "^9.1.0",
     "eslint": "^8.37.0",
     "esno": "^0.16.3",
