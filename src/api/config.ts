@@ -2,11 +2,15 @@
 
 import path from 'node:path'
 import NpmcliConfig from '@npmcli/config'
+import type { TextDocument, TextEditor } from 'vscode'
+import { window, workspace } from 'vscode'
 
 const getNpmConfig = async () => {
+  const root = getWorkspaceFolderPath(window.activeTextEditor)
+
   const npmcliConfig = new NpmcliConfig({
     definitions: {},
-    npmPath: path.dirname(process.cwd()),
+    npmPath: path.dirname(root ?? process.cwd()),
     flatten: (current, total) => {
       Object.assign(total, current)
     },
@@ -28,6 +32,23 @@ const getNpmConfig = async () => {
 
   await npmcliConfig.load()
   return npmcliConfig.flat
+}
+
+export function getWorkspaceFolderPath(
+  documentOrEditor?: TextDocument | TextEditor,
+) {
+  if (!documentOrEditor)
+    return
+  const document = isEditor(documentOrEditor)
+    ? documentOrEditor.document
+    : documentOrEditor
+  return workspace.getWorkspaceFolder(document.uri)?.uri.fsPath
+}
+
+function isEditor(
+  documentOrEditor: TextDocument | TextEditor,
+): documentOrEditor is TextEditor {
+  return (documentOrEditor as any).document != null
 }
 
 export { getNpmConfig }
