@@ -5,7 +5,7 @@
   "version": "0.0.1",
   "private": true,
   "packageManager": "pnpm@8.6.0",
-  "description": "",
+  "description": "Helps JavaScript developers managing dependencies with package.json.",
   "author": "Riri <daydreamerriri@outlook.com>",
   "license": "MIT",
   "homepage": "https://github.com/Daydreamer-riri/vscode-ext-packages#readme",
@@ -86,11 +86,14 @@
     "dev": "nr build --watch",
     "lint": "eslint .",
     "vscode:prepublish": "nr build",
-    "publish": "vsce publish --no-dependencies",
-    "pack": "vsce package --no-dependencies",
+    "publish": "vsce publish",
+    "pack": "vsce package",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
     "release": "bumpp && nr publish"
+  },
+  "dependencies": {
+    "node-gyp": "9.4.0"
   },
   "devDependencies": {
     "@npmcli/config": "^6.1.3",
