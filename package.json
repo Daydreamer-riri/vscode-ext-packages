@@ -8,13 +8,13 @@
   "description": "",
   "author": "Riri <daydreamerriri@outlook.com>",
   "license": "MIT",
-  "homepage": "https://github.com/Daydreamer-riri/ext-name#readme",
+  "homepage": "https://github.com/Daydreamer-riri/vscode-ext-packages#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Daydreamer-riri/ext-name"
+    "url": "https://github.com/Daydreamer-riri/vscode-ext-packages"
   },
   "bugs": {
-    "url": "https://github.com/Daydreamer-riri/ext-name/issues"
+    "url": "https://github.com/Daydreamer-riri/vscode-ext-packages/issues"
   },
   "keywords": [
     "node",
@@ -48,7 +48,7 @@
       {
         "command": "packages.updateAll",
         "title": "Update All dependencies of the package.json",
-        "category": "👆 Packages"
+        "category": "🎈 Packages"
       },
       {
         "command": "packages.retry",
