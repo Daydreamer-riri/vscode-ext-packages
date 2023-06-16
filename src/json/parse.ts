@@ -8,9 +8,19 @@ export function parseJson(text: string) {
   const pkg = JSON.parse(text)
   const deps = { ...(pkg[DEPS] ?? {}), ...(pkg[DEV_DEPS] ?? {}) }
   const depNames = Object.keys(deps)
+
+  const depsPos = text.indexOf(`"${DEPS}"`)
+  const devDepsPos = text.indexOf(`"${DEV_DEPS}"`)
+
   const depItems = depNames.map((name) => {
-    const reg = new RegExp(`"${name}".*,?`)
-    const match = reg.exec(text)
+    const reg = new RegExp(`"${name}".*,?`, 'g')
+    const minPos = name in (pkg[DEPS] ?? {}) ? depsPos : devDepsPos
+    let match: RegExpExecArray | null
+    while (match = reg.exec(text)) {
+      if (match.index > minPos)
+        break
+    }
+
     if (!match)
       throw new Error('Can\'t find deps')
 

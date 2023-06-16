@@ -68,6 +68,10 @@ export default function decoration(
     // errorDecorator.replace("${version}", versions[0]);
     contentText = errorDecorator
   }
+  if (item.value?.startsWith('workspace:')) {
+    hoverMessage = new MarkdownString('#### Info \n').appendMarkdown(`* ${item.key}: Workspace dependency`)
+    contentText = compatibleDecorator.replace('${version}', '')
+  }
   else {
     hoverMessage.appendMarkdown('#### Versions')
     hoverMessage.appendMarkdown(` _( [Check NPM](https://www.npmjs.com/package/${item.key.replace(/"/g, '')}) )_`)
