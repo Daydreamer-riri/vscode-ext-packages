@@ -11,12 +11,11 @@ import {
   Range,
   window,
 } from 'vscode'
-
 import { validRange } from 'semver'
 import { checkVersion } from '../semver/utils'
 import type Item from '../core/Item'
-import type { ReplaceItem } from '../json/commands'
-import { status } from '../json/commands'
+import type { ReplaceItem } from '../commands/commands'
+import { status } from '../commands/commands'
 
 export const latestVersion = () =>
   window.createTextEditorDecorationType({

@@ -1,9 +1,10 @@
 /* eslint-disable import/no-mutable-exports */
-import type { Position, TextDocument, TextEditor } from 'vscode'
-import { Range } from 'vscode'
+import type { ExtensionContext, Position, TextDocument, TextEditor } from 'vscode'
+import { Range, window, workspace } from 'vscode'
+
 import decorate, { decorationHandle } from '../ui/decorator'
 import { parseJson } from '../json/parse'
-import { status } from '../json/commands'
+import { status } from '../commands/commands'
 import { statusBarItem } from '../ui/indicators'
 import type Dependency from './Dependency'
 import type Item from './Item'
@@ -93,4 +94,20 @@ export const throttledListener = (editor: TextEditor | undefined, timeout = 0) =
     listener(editor)
     throttleId = undefined
   }, timeout)
+}
+
+export function registerListener(context: ExtensionContext) {
+  context.subscriptions.push(
+    window.onDidChangeActiveTextEditor(listener),
+    workspace.onDidChangeTextDocument((e) => {
+      const { fileName } = e.document
+      if (fileName.toLocaleLowerCase().endsWith('package.json')) {
+        // if (!e.document.isDirty)
+        //   listener(window.activeTextEditor)
+        throttledListener(window.activeTextEditor)
+      }
+    }),
+  )
+
+  listener(window.activeTextEditor)
 }

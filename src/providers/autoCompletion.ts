@@ -2,6 +2,7 @@ import type {
   CancellationToken,
   CompletionContext,
   CompletionItemProvider,
+  ExtensionContext,
   ProviderResult,
   TextDocument,
 } from 'vscode'
@@ -11,10 +12,25 @@ import {
   CompletionList,
   Position,
   Range,
+  languages,
 } from 'vscode'
 
 import { fetchedDepsMap, getFetchedDependency } from '../core/listener'
 import { RE_VERSION } from '../json/parse'
+
+export function registerAutoCompletion(context: ExtensionContext) {
+  const documentSelector = { language: 'json', pattern: '**/package.json' }
+
+  context.subscriptions.push(
+    // Register our versions completions provider
+    languages.registerCompletionItemProvider(
+      documentSelector,
+      new VersionCompletions(),
+      '\'', '"', '.', '+', '-',
+      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    ),
+  )
+}
 
 const alphabet = 'abcdefghijklmnopqrstuvwxyz'
 export function sortText(i: number): string {

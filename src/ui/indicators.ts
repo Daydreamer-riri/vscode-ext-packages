@@ -17,7 +17,7 @@ export const statusBarItem: StatusBarItemExt = window.createStatusBarItem(
 ) as StatusBarItemExt
 statusBarItem.text = 'Packages: OK'
 statusBarItem.setText = (text?: string) =>
-  (statusBarItem.text = text ? `Packages: ${text}` : 'Crates: OK')
+  (statusBarItem.text = text ? `Packages: ${text}` : 'Packages: OK')
 
 export default {
   statusBarItem,

@@ -29,8 +29,6 @@ export const replaceVersion = commands.registerTextEditorCommand(
           info.item.substr(1, info.item.length - 2),
         )
 
-        console.log(editor.document.getText(new Range(editor.document.positionAt(info.start + 1),
-          editor.document.positionAt(info.end))))
         status.inProgress = false
       }
     }
