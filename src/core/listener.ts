@@ -4,6 +4,7 @@ import { Range } from 'vscode'
 import decorate, { decorationHandle } from '../ui/decorator'
 import { parseJson } from '../json/parse'
 import { status } from '../json/commands'
+import { statusBarItem } from '../ui/indicators'
 import type Dependency from './Dependency'
 import type Item from './Item'
 import { fetchPackageVersions } from './fetcher'
@@ -56,6 +57,7 @@ export async function parseAndDecorate(
   }
   catch (e) {
     console.error(e)
+    statusBarItem.setText('package.json is not valid!')
     if (decorationHandle)
       decorationHandle.dispose()
   }
@@ -67,11 +69,11 @@ export default async function listener(editor: TextEditor | undefined) {
     if (fileName.toLocaleLowerCase().endsWith('package.json')) {
       status.inProgress = true
       status.replaceItems = []
-
+      statusBarItem.show()
       await parseAndDecorate(editor)
     }
     else {
-      // TODO: status
+      statusBarItem.hide()
     }
     status.inProgress = false
   }

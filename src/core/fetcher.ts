@@ -2,12 +2,15 @@ import { CompletionItem, CompletionItemKind, CompletionList } from 'vscode'
 import { getPackageData } from '../api/npm'
 import compareVersions from '../semver/compareVersion'
 import { sortText } from '../providers/autoCompletion'
+import { statusBarItem } from '../ui/indicators'
 import type Item from './Item'
 import type Dependency from './Dependency'
 
 export function fetchPackageVersions(
   dependencies: Item[],
 ): [Promise<Dependency[]>, Map<string, Dependency[]>] {
+  statusBarItem.setText('👀 Fetching npm')
+
   const responsesMap: Map<string, Dependency[]> = new Map()
 
   const responses: Promise<Dependency>[] = dependencies.map(
