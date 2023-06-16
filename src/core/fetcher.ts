@@ -22,7 +22,6 @@ export function fetchPackageVersions(
           }, [])
           .sort(compareVersions)
           .reverse()
-
         let i = 0
         const versionCompletionItems = new CompletionList(
           versions.map((version) => {

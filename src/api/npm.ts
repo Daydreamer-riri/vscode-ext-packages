@@ -1,10 +1,8 @@
-import { workspace } from 'vscode'
-import pacote from 'pacote'
+import { window } from 'vscode'
+import { ofetch } from 'ofetch'
 import { execCmd } from '../utils/cmd'
-import { createReg } from '../utils/reg'
 import type { PackageData } from '../types'
-import { fetch } from './fetch'
-import { getNpmConfig } from './config'
+import { getWorkspaceFolderPath } from './config'
 
 const cache = new Map<string, { cacheTime: number; data: PackageData }>()
 const cacheTTL = 30 * 60_000 // 30min
@@ -23,22 +21,25 @@ export async function getPackageData(name: string): Promise<PackageData> {
   let error: any
   const cacheData = cache.get(name)
   if (cacheData) {
-    if (ttl(cacheData.cacheTime) < cacheTTL)
+    if (ttl(cacheData.cacheTime) < cacheTTL) {
+      console.log('read cache')
       return cacheData.data
+    }
 
-    else
+    else {
       cache.delete(name)
+    }
   }
 
   try {
-    const npmConfig = await getNpmConfig()
-    const data = await pacote.packument(name, { ...npmConfig, fullMetadata: true })
+    const root = getWorkspaceFolderPath(window.activeTextEditor)!
+    const data = await getPkg(name, root)
 
     if (data) {
       const result = {
         tags: data['dist-tags'],
         versions: Object.keys(data.versions || {}),
-        time: data.time,
+        // time: data.time,
         // raw: data,
       }
 
@@ -60,45 +61,31 @@ export async function getPackageData(name: string): Promise<PackageData> {
   }
 }
 
-const latestPkgCache = new Map()
-const validPeriod = 30000
-export async function getLatestPkg(pkg: string, cwd: string) {
+export async function getPkg(pkg: string, cwd: string) {
   const registry = await getNpmRegistry(pkg, cwd).catch(() => null)
+
   if (!registry)
-    return null
+    return {}
 
-  if (latestPkgCache.has(pkg))
-    return latestPkgCache.get(pkg)
+  const pkgJSON = await ofetch<Record<string, any>>(`/${pkg}`, { baseURL: registry })
 
-  const pkgURL = new URL(`/${pkg}/latest`, registry)
-  const pkgJSON = await fetch(pkgURL.href)
-  latestPkgCache.set(pkg, pkgJSON)
-  setTimeout(() => latestPkgCache.delete(pkg), validPeriod)
   return pkgJSON
 }
 
+const registryCache = new Map<string, string | null | undefined>()
+
 export async function getNpmRegistry(pkg: string, cwd: string) {
+  const key = `${pkg}+++${cwd}`
+  if (registryCache.has(key))
+    return registryCache.get(key)
+
   const cmd = 'npm config get registry'
   const scopedCmd = `npm config get ${pkg}:registry`
   const [defaultRegistry, scopedRegistry] = await Promise.all([
     execCmd(cmd, cwd).catch(() => null),
     execCmd(scopedCmd, cwd).catch(() => null),
   ])
+
+  registryCache.set(key, scopedRegistry || defaultRegistry)
   return scopedRegistry || defaultRegistry
-}
-
-/** bundlephobia only supports npmjs.com packages */
-const bundlePhobiaCache = new Map()
-export async function getBundlePhobiaPkg(pkgName: string, pkgVersion?: string) {
-  const pkgNameConf: string | undefined = workspace.getConfiguration('pkg.inspector').get('disableBundlephobia')
-  if (pkgNameConf && createReg(pkgNameConf).test(pkgName))
-    return
-
-  const pkg = pkgVersion ? `${pkgName}@${pkgVersion}` : pkgName
-  if (bundlePhobiaCache.has(pkg))
-    return bundlePhobiaCache.get(pkg)
-
-  const result = await fetch(`https://bundlephobia.com/api/size?package=${pkg}&record=true`)
-  bundlePhobiaCache.set(pkg, result)
-  return result
 }

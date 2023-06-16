@@ -5,7 +5,6 @@ import listener, { throttledListener } from './core/listener'
 import { VersionCompletions } from './providers/autoCompletion'
 
 export function activate(context: ExtensionContext) {
-  window.showInformationMessage('Hello')
   const documentSelector: DocumentSelector = { language: 'json', pattern: '**/package.json' }
 
   context.subscriptions.push(
