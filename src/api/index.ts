@@ -1,8 +1,8 @@
 import { window } from 'vscode'
 import type Item from '../core/Item'
 import { now, ttl } from '../utils/ttl'
+import { getWorkspaceFolderPath } from '../utils/resolve'
 import { dumpCache, loadCache } from './cache'
-import { getWorkspaceFolderPath } from './config'
 import { version } from './version'
 
 const cacheInit = Object.entries(loadCache())
