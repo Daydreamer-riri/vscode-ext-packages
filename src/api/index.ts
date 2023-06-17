@@ -1,20 +1,15 @@
 import { window } from 'vscode'
 import type Item from '../core/Item'
+import { now, ttl } from '../utils/ttl'
+import { dumpCache, loadCache } from './cache'
 import { getWorkspaceFolderPath } from './config'
 import { version } from './version'
 
-const cache = new Map<string, { cacheTime: number; data: string[] }>()
+const cacheInit = Object.entries(loadCache())
+const cache = new Map<string, { cacheTime: number; data: string[] }>(cacheInit)
 const cacheTTL = 30 * 60_000 // 30min
-// eslint-disable-next-line unused-imports/no-unused-vars
+
 let cacheChanged = false
-
-function now() {
-  return +new Date()
-}
-
-function ttl(n: number) {
-  return now() - n
-}
 
 const workspacePrefix = 'workspace:'
 
@@ -28,23 +23,25 @@ export async function getPackageData(item: Item): Promise<string[]> {
   if (cacheData) {
     if (ttl(cacheData.cacheTime) < cacheTTL) {
       console.log('read cache')
-      return cacheData.data
     }
-
     else {
-      cache.delete(name)
+      // cache.delete(name)
+      reGetVersion(name)
     }
+    return cacheData.data
   }
 
+  return await reGetVersion(name)
+}
+
+async function reGetVersion(name: string) {
   try {
     const root = getWorkspaceFolderPath(window.activeTextEditor)!
     const data = await version(name, root)
 
     if (data) {
       cache.set(name, { data, cacheTime: now() })
-
       cacheChanged = true
-
       return data
     }
   }
@@ -53,4 +50,10 @@ export async function getPackageData(item: Item): Promise<string[]> {
   }
 
   return []
+}
+
+export function saveCache() {
+  const cacheContent = Object.fromEntries(cache.entries())
+  delete cacheContent.next
+  dumpCache(cacheContent, cacheChanged)
 }

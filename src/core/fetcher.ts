@@ -1,5 +1,5 @@
 import { CompletionItem, CompletionItemKind, CompletionList } from 'vscode'
-import { getPackageData } from '../api/npm'
+import { getPackageData } from '../api'
 import compareVersions from '../semver/compareVersion'
 import { sortText } from '../providers/autoCompletion'
 import { statusBarItem } from '../ui/indicators'
