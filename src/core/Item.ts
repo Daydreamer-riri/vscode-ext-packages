@@ -4,7 +4,7 @@
 export default class Item {
   key = ''
   values: Array<any> = []
-  value: string | undefined = ''
+  value = ''
   start = -1
   end = -1
   constructor(item?: Item) {

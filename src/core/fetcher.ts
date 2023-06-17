@@ -16,7 +16,7 @@ export function fetchPackageVersions(
   const responses: Promise<Dependency>[] = dependencies.map(
     async (item) => {
       try {
-        const data = await getPackageData(item.key)
+        const data = await getPackageData(item)
         const versions = data.versions
           .reduce((total: string[], item) => {
             if (!item.includes('-'))

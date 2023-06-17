@@ -2,6 +2,7 @@ import { window } from 'vscode'
 import { ofetch } from 'ofetch'
 import { execCmd } from '../utils/cmd'
 import type { PackageData } from '../types'
+import type Item from '../core/Item'
 import { getWorkspaceFolderPath } from './config'
 
 const cache = new Map<string, { cacheTime: number; data: PackageData }>()
@@ -17,7 +18,16 @@ function ttl(n: number) {
   return now() - n
 }
 
-export async function getPackageData(name: string): Promise<PackageData> {
+const workspacePrefix = 'workspace:'
+
+export async function getPackageData(item: Item): Promise<PackageData> {
+  const name = item.key
+  if (item.value.slice(0, 10) === workspacePrefix) {
+    return {
+      tags: {},
+      versions: [item.value],
+    }
+  }
   let error: any
   const cacheData = cache.get(name)
   if (cacheData) {
