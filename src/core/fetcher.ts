@@ -17,7 +17,7 @@ export function fetchPackageVersions(
     async (item) => {
       try {
         const data = await getPackageData(item)
-        const versions = data.versions
+        const versions = data
           .reduce((total: string[], item) => {
             if (!item.includes('-'))
               total.push(item)

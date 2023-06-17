@@ -1,11 +1,9 @@
 import { window } from 'vscode'
-import { ofetch } from 'ofetch'
-import { execCmd } from '../utils/cmd'
-import type { PackageData } from '../types'
 import type Item from '../core/Item'
 import { getWorkspaceFolderPath } from './config'
+import { version } from './version'
 
-const cache = new Map<string, { cacheTime: number; data: PackageData }>()
+const cache = new Map<string, { cacheTime: number; data: string[] }>()
 const cacheTTL = 30 * 60_000 // 30min
 // eslint-disable-next-line unused-imports/no-unused-vars
 let cacheChanged = false
@@ -20,15 +18,12 @@ function ttl(n: number) {
 
 const workspacePrefix = 'workspace:'
 
-export async function getPackageData(item: Item): Promise<PackageData> {
+export async function getPackageData(item: Item): Promise<string[]> {
   const name = item.key
-  if (item.value.slice(0, 10) === workspacePrefix) {
-    return {
-      tags: {},
-      versions: [item.value],
-    }
-  }
-  let error: any
+  if (item.value.slice(0, 10) === workspacePrefix)
+    return [item.value]
+
+  // let error: any
   const cacheData = cache.get(name)
   if (cacheData) {
     if (ttl(cacheData.cacheTime) < cacheTTL) {
@@ -43,59 +38,19 @@ export async function getPackageData(item: Item): Promise<PackageData> {
 
   try {
     const root = getWorkspaceFolderPath(window.activeTextEditor)!
-    const data = await getPkg(name, root)
+    const data = await version(name, root)
 
     if (data) {
-      const result = {
-        tags: data['dist-tags'],
-        versions: Object.keys(data.versions || {}),
-        // time: data.time,
-        // raw: data,
-      }
-
-      cache.set(name, { data: result, cacheTime: now() })
+      cache.set(name, { data, cacheTime: now() })
 
       cacheChanged = true
 
-      return result
+      return data
     }
   }
   catch (e) {
-    error = e
+    console.error(e)
   }
 
-  return {
-    tags: {},
-    versions: [],
-    error: error?.statusCode?.toString() || error,
-  }
-}
-
-export async function getPkg(pkg: string, cwd: string) {
-  const registry = await getNpmRegistry(pkg, cwd).catch(() => null)
-
-  if (!registry)
-    return {}
-
-  const pkgJSON = await ofetch<Record<string, any>>(`/${pkg}`, { baseURL: registry })
-
-  return pkgJSON
-}
-
-const registryCache = new Map<string, string | null | undefined>()
-
-export async function getNpmRegistry(pkg: string, cwd: string) {
-  const key = `${pkg}+++${cwd}`
-  if (registryCache.has(key))
-    return registryCache.get(key)
-
-  const cmd = 'npm config get registry'
-  const scopedCmd = `npm config get ${pkg}:registry`
-  const [defaultRegistry, scopedRegistry] = await Promise.all([
-    execCmd(cmd, cwd).catch(() => null),
-    execCmd(scopedCmd, cwd).catch(() => null),
-  ])
-
-  registryCache.set(key, scopedRegistry || defaultRegistry)
-  return scopedRegistry || defaultRegistry
+  return []
 }
