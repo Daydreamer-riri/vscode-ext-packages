@@ -38,6 +38,7 @@ export default function decoration(
   incompatibleDecorator: string,
   errorDecorator: string,
   error?: string,
+  info?: string,
 ): DecorationOptions {
   // Also handle json valued dependencies
 
@@ -67,8 +68,8 @@ export default function decoration(
     // errorDecorator.replace("${version}", versions[0]);
     contentText = errorDecorator
   }
-  if (item.value?.startsWith('workspace:')) {
-    hoverMessage = new MarkdownString('#### Info \n').appendMarkdown(`* ${item.key}: Workspace dependency`)
+  if (info) {
+    hoverMessage = new MarkdownString('#### Info \n').appendMarkdown(`* ${info}`)
     contentText = compatibleDecorator.replace('${version}', '')
   }
   else {

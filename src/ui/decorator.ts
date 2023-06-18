@@ -32,6 +32,7 @@ export default function decorate(editor: TextEditor, dependencies: Dependency[])
         pref.incompatibleDecorator,
         pref.errorDecorator,
         dependency.error,
+        dependency.info,
       )
 
       if (decor)

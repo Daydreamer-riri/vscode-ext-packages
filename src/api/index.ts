@@ -4,6 +4,7 @@ import { now, ttl } from '../utils/ttl'
 import { getWorkspaceFolderPath } from '../utils/resolve'
 import { dumpCache, loadCache } from './cache'
 import { version } from './version'
+import { protocolDep } from './utils'
 
 const cacheInit = Object.entries(loadCache())
 const cache = new Map<string, { cacheTime: number; data: string[] }>(cacheInit)
@@ -11,12 +12,17 @@ const cacheTTL = 30 * 60_000 // 30min
 
 let cacheChanged = false
 
-const workspacePrefix = 'workspace:'
+interface PackageData {
+  version: string[]
+  info?: string
+}
 
-export async function getPackageData(item: Item): Promise<string[]> {
+export async function getPackageData(item: Item): Promise<PackageData> {
+  const preTest = protocolDep(item)
+  if (preTest)
+    return preTest
+
   const name = item.key
-  if (item.value.slice(0, 10) === workspacePrefix)
-    return [item.value]
 
   // let error: any
   const cacheData = cache.get(name)
@@ -28,10 +34,12 @@ export async function getPackageData(item: Item): Promise<string[]> {
       // cache.delete(name)
       reGetVersion(name)
     }
-    return cacheData.data
+    return { version: cacheData.data }
   }
 
-  return await reGetVersion(name)
+  return {
+    version: await reGetVersion(name),
+  }
 }
 
 async function reGetVersion(name: string) {

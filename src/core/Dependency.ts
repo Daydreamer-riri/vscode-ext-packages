@@ -8,7 +8,7 @@ export default interface Dependency {
   item: Item
   versions?: Array<string>
   error?: string
-
+  info?: string
   versionCompletionItems?: CompletionList
   featureCompletionItems?: Map<string, CompletionList>
 }
