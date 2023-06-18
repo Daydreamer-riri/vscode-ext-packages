@@ -7,7 +7,7 @@ This is packages, an extension for node dependencies. Aims helping developers to
 ## Features
 
 - Displays the latest version of the package next to it.
-- Shows all versions (clickable) on the tooltip of the crate hovered.
+- Shows all versions (clickable) on the tooltip of the package hovered.
 
 ## Preview
 
