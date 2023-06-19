@@ -45,7 +45,7 @@ export default function decoration(
   const start = item.start
   const endofline = editor.document.lineAt(editor.document.positionAt(item.end)).range.end
   const end = item.end
-  const version = item.value?.replace(',', '')
+  const version = item.value === 'latest' ? '*' : item.value
   const [satisfies, maxSatisfying] = checkVersion(version, versions)
 
   const formatError = (error: string) => {
