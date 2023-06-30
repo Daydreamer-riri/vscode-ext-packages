@@ -72,7 +72,7 @@ export default function decoration(
     hoverMessage = new MarkdownString('#### Info \n').appendMarkdown(`* ${info}`)
     contentText = compatibleDecorator.replace('${version}', '')
   }
-  else {
+  if (!error && !info) {
     hoverMessage.appendMarkdown('#### Versions')
     hoverMessage.appendMarkdown(` _( [Check NPM](https://www.npmjs.com/package/${item.key.replace(/"/g, '')}) )_`)
     hoverMessage.isTrusted = true
