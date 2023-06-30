@@ -7,7 +7,14 @@ export const RE_VERSION = /^[ \t]*"(\S+?)"([ \t]*:[ \t]*)(")(.*?)\3/
 const depFieldsRe = /"(devD|d)ependencies"[ \t]*:[ \t]*{[\s\S]*?}/g
 
 export function parseJson(text: string) {
-  const pkg = JSON.parse(text)
+  let pkg: any
+  try {
+    pkg = JSON.parse(text)
+  }
+  catch (e) {
+    console.error(e)
+    return []
+  }
   const deps = { ...(pkg[DEPS] ?? {}), ...(pkg[DEV_DEPS] ?? {}) }
   const depNames = Object.keys(deps)
 

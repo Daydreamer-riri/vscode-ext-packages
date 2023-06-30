@@ -24,7 +24,7 @@ export const replaceVersion = commands.registerTextEditorCommand(
         edit.replace(
           new Range(
             editor.document.positionAt(info.start + 1),
-            editor.document.positionAt(info.end),
+            editor.document.positionAt(info.end - 1),
           ),
           info.item.substr(1, info.item.length - 2),
         )
