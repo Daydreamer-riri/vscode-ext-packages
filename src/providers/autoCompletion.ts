@@ -70,22 +70,13 @@ export class VersionCompletions implements CompletionItemProvider {
         return
 
       if (version.trim().length !== 0) {
-        const filterVersion = version
-          .substr(0, versionStart - position.character)
-          .toLowerCase()
-
         const range = new Range(
-          new Position(position.line, versionStart),
+          new Position(position.line, ['^', '~'].includes(version[0]) ? versionStart + 1 : versionStart),
           new Position(position.line, versionEnd),
         )
 
         let i = 0
-        const completionItems = (filterVersion.length > 0
-          ? fetchedDep.versions.filter(version =>
-            version.toLowerCase().startsWith(filterVersion),
-          )
-          : fetchedDep.versions
-        ).map((version) => {
+        const completionItems = fetchedDep.versions.map((version) => {
           const item = new CompletionItem(version, CompletionItemKind.Class)
           item.range = range
           item.preselect = i === 0
