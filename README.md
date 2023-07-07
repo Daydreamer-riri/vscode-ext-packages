@@ -1,5 +1,5 @@
 <p align="center">
-<img src="./res/logo.png" height="100">
+<img src="./res/logo.svg" height="100">
 </p>
 <h1 align="center">packages</h1>
 
