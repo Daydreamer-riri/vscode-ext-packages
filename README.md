@@ -1,8 +1,15 @@
-# packages
+<p align="center">
+<img src="./res/logo.png" height="100">
+</p>
+<h1 align="center">packages</h1>
 
+<p align="center">
 <a href="https://marketplace.visualstudio.com/items?itemName=ririd.packages" target="__blank"><img src="https://img.shields.io/visual-studio-marketplace/v/ririd.packages.svg?color=eee&amp;label=VS%20Code%20Marketplace&logo=visual-studio-code" alt="Visual Studio Marketplace Version" /></a>
+</p>
 
-This is packages, an extension for node dependencies. Aims helping developers to manage dependencies while using _package.json_.
+<p align="center">
+This is packages, an extension for node dependencies. Aims helping developers to manage dependencies while using <i>package.json</i>.
+</p>
 
 ## Features
 
