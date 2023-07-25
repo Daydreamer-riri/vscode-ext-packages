@@ -28,7 +28,7 @@ export async function getPackageData(item: Item): Promise<PackageData> {
   const cacheData = cache.get(name)
   if (cacheData) {
     if (ttl(cacheData.cacheTime) < cacheTTL) {
-      console.log('read cache')
+      // console.log('read cache')
     }
     else {
       // cache.delete(name)

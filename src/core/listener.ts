@@ -47,19 +47,13 @@ export async function parseAndDecorate(
   // const config = workspace.getConfiguration('', editor.document.uri)
 
   try {
-    const parseStart = performance.now()
     dependencies = parseDeps(text)
-    console.log('parse ---', performance.now() - parseStart)
-    const fetchStart = performance.now()
     if (fetchDeps || !fetchedDeps || !fetchedDepsMap) {
       const data = fetchPackageVersions(dependencies)
       fetchedDeps = await data[0]
       fetchedDepsMap = data[1]
     }
-    console.log('fetch ---', performance.now() - fetchStart)
-    const decorateStart = performance.now()
     decorate(editor, fetchedDeps)
-    console.log('decorate ---', performance.now() - decorateStart)
   }
   catch (e) {
     console.error(e)
