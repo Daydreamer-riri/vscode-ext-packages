@@ -2,7 +2,7 @@
   "publisher": "ririd",
   "name": "packages",
   "displayName": "packages",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "packageManager": "pnpm@8.6.0",
   "description": "Helps JavaScript developers managing dependencies with package.json.",
