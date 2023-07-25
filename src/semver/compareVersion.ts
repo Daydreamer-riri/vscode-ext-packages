@@ -26,8 +26,8 @@ function compareVersions(v1: string, v2: string) {
   const s2 = split(v2)
   const limit = Math.max(s1.length - 1, s2.length - 1)
   for (let i = 0; i < limit; i++) {
-    const n1 = parseInt(s1[i] || '0', 10)
-    const n2 = parseInt(s2[i] || '0', 10)
+    const n1 = Number.parseInt(s1[i] || '0', 10)
+    const n2 = Number.parseInt(s2[i] || '0', 10)
 
     if (n1 > n2)
       return 1
@@ -39,8 +39,8 @@ function compareVersions(v1: string, v2: string) {
   const sp2 = s2[s2.length - 1]
 
   if (sp1 && sp2) {
-    const p1 = sp1.split('.').map(str => /^\d+$/.test(str) ? parseInt(str, 10) : str)
-    const p2 = sp2.split('.').map(str => /^\d+$/.test(str) ? parseInt(str, 10) : str)
+    const p1 = sp1.split('.').map(str => /^\d+$/.test(str) ? Number.parseInt(str, 10) : str)
+    const p2 = sp2.split('.').map(str => /^\d+$/.test(str) ? Number.parseInt(str, 10) : str)
     const maxLimit = Math.max(p1.length, p2.length)
     for (let i = 0; i < maxLimit; i++) {
       if (p1[i] === undefined || (typeof p2[i] === 'string' && typeof p1[i] === 'number'))
