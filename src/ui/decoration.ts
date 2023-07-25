@@ -101,10 +101,10 @@ export default function decoration(
       hoverMessage.appendMarkdown('\n * ')
       hoverMessage.appendMarkdown(command)
     }
-    if (version === '?') {
+    if (version === `${prefix}?`) {
       const version = versions[0]
       const info: ReplaceItem = {
-        item: `"${version}"`,
+        item: `"${prefix}${version}"`,
         start,
         end,
       }
@@ -113,7 +113,7 @@ export default function decoration(
         edit.replace(
           new Range(
             editor.document.positionAt(info.start + 1),
-            editor.document.positionAt(info.end),
+            editor.document.positionAt(info.end - 1),
           ),
           info.item.substr(1, info.item.length - 2),
         )
