@@ -94,22 +94,22 @@
     "patch": "esno scripts/patch.ts"
   },
   "devDependencies": {
-    "@ririd/eslint-config": "^0.5.1",
+    "@ririd/eslint-config": "^0.6.0",
     "@types/node": "^18.15.11",
     "@types/npm-registry-fetch": "^8.0.4",
     "@types/vscode": "^1.69.0",
-    "bumpp": "^9.1.0",
-    "eslint": "^8.37.0",
-    "esno": "^0.16.3",
+    "bumpp": "^9.1.1",
+    "eslint": "^8.45.0",
+    "esno": "^0.17.0",
     "npm-registry-fetch": "^14.0.5",
     "ofetch": "^1.1.0",
     "pnpm": "^8.1.1",
     "rimraf": "^5.0.1",
     "semver": "^7.5.1",
-    "tsup": "^6.7.0",
+    "tsup": "^7.1.0",
     "typescript": "^5.0.3",
-    "vite": "^4.2.1",
-    "vitest": "^0.29.8",
+    "vite": "^4.4.7",
+    "vitest": "^0.33.0",
     "vsce": "^2.15.0"
   }
 }
