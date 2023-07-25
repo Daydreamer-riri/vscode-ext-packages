@@ -16,6 +16,7 @@ import { checkVersion } from '../semver/utils'
 import type Item from '../core/Item'
 import type { ReplaceItem } from '../commands/commands'
 import { status } from '../commands/commands'
+import { prefixs } from '../constants'
 
 export const latestVersion = () =>
   window.createTextEditorDecorationType({
@@ -85,10 +86,11 @@ export default function decoration(
       })
     }
 
+    const prefix = prefixs.includes(version[0]) ? version[0] : ''
     for (let i = 0; i < versions.length; i++) {
       const version = versions[i]
       const replaceData: ReplaceItem = {
-        item: `"${version}"`,
+        item: `"${prefix}${version}"`,
         start,
         end,
       }

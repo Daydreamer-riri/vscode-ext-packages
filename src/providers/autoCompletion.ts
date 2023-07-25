@@ -17,6 +17,7 @@ import {
 
 import { fetchedDepsMap, getFetchedDependency } from '../core/listener'
 import { RE_VERSION } from '../json/parse'
+import { prefixs } from '../constants'
 
 export function registerAutoCompletion(context: ExtensionContext) {
   const documentSelector = { language: 'json', pattern: '**/package.json' }
@@ -71,7 +72,7 @@ export class VersionCompletions implements CompletionItemProvider {
 
       if (version.trim().length !== 0) {
         const range = new Range(
-          new Position(position.line, ['^', '~'].includes(version[0]) ? versionStart + 1 : versionStart),
+          new Position(position.line, prefixs.includes(version[0]) ? versionStart + 1 : versionStart),
           new Position(position.line, versionEnd),
         )
 
