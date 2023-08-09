@@ -1,10 +1,13 @@
 import { CompletionItem, CompletionItemKind, CompletionList } from 'vscode'
+import PQueue from 'p-queue'
 import { getPackageData } from '../api'
 import compareVersions from '../semver/compareVersion'
 import { sortText } from '../providers/autoCompletion'
 import { statusBarItem } from '../ui/indicators'
 import type Item from './Item'
 import type Dependency from './Dependency'
+
+const queue = new PQueue({ concurrency: 10 })
 
 export function fetchPackageVersions(
   dependencies: Item[],
@@ -16,7 +19,10 @@ export function fetchPackageVersions(
   const responses: Promise<Dependency>[] = dependencies.map(
     async (item) => {
       try {
-        const data = await getPackageData(item)
+        const data = await queue.add(() => getPackageData(item))
+        if (!data)
+          throw new Error('Get Package information failure')
+
         const versions = data.version
           .reduce((total: string[], item) => {
             if (!item.includes('-'))
