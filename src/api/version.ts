@@ -19,7 +19,7 @@ export async function version(name: string, cwd: string) {
   const registry = await getNpmRegistry(name, cwd)
   try {
     const data = await fetch.json(name, { registry, fullMetadata: true, headers: Header(name) })
-    const versions = Object.keys(data.versions || {})
+    const versions = Object.keys(data.versions || {}).filter(v => !v.includes('-'))
     return versions
   }
   catch {
