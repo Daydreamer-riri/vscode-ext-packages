@@ -20,6 +20,10 @@ This is packages, an extension for node dependencies. Aims helping developers to
 
 ![preview](./screenshots/preview.gif)
 
+## Roadmap
+
+- [ ] Use `worker_threads` to avoid blocking the main thread.
+
 ## Thanks
 
 `packages` is inspired by [crates](https://github.com/serayuzgur/crates), which is an extension for managing Rust dependencies.
