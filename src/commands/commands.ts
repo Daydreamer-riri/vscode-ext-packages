@@ -1,6 +1,7 @@
 import type { TextEditor, TextEditorEdit } from 'vscode'
 import { Range, commands } from 'vscode'
 import jsonListener from '../core/listener'
+import { clearCache } from '../core/fetcher'
 
 export interface ReplaceItem {
   item: string
@@ -38,8 +39,10 @@ export const replaceVersion = commands.registerTextEditorCommand(
 export const reload = commands.registerTextEditorCommand(
   'packages.retry',
   (editor: TextEditor) => {
-    if (editor)
+    if (editor) {
+      clearCache()
       jsonListener(editor)
+    }
   },
 )
 

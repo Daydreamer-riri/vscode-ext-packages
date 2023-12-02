@@ -10,10 +10,17 @@ import type Item from './Item'
 import type Dependency from './Dependency'
 
 // const queue = new PQueue({ concurrency: 10 })
+let cache: [Dependency[], Map<string, Dependency[]>] | null = null
+
+export function clearCache() {
+  cache = null
+}
 
 export async function fetchPackageVersions(
   dependencies: Item[],
 ): Promise<[Dependency[], Map<string, Dependency[]>]> {
+  if (cache)
+    return cache
   statusBarItem.setText('👀 Fetching npm')
 
   const responsesMap: Map<string, Dependency[]> = new Map()
@@ -70,7 +77,9 @@ export async function fetchPackageVersions(
     },
   )
 
-  return [responses, responsesMap]
+  cache = [responses, responsesMap]
+
+  return cache
 }
 
 function fetchPackageData(
