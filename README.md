@@ -22,7 +22,7 @@ This is packages, an extension for node dependencies. Aims helping developers to
 
 ## Roadmap
 
-- [ ] Use `worker_threads` to avoid blocking the main thread.
+- [x] Use `worker_threads` to avoid blocking the main thread.
 
 ## Thanks
 

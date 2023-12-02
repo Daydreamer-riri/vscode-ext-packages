@@ -1,7 +1,5 @@
-import { window } from 'vscode'
 import type Item from '../core/Item'
 import { now, ttl } from '../utils/ttl'
-import { getWorkspaceFolderPath } from '../utils/resolve'
 import { dumpCache, loadCache } from './cache'
 import { version } from './version'
 import { protocolDep } from './utils'
@@ -12,12 +10,12 @@ const cacheTTL = 30 * 60_000 // 30min
 
 let cacheChanged = false
 
-interface PackageData {
+export interface PackageData {
   version: string[]
   info?: string
 }
 
-export async function getPackageData(item: Item): Promise<PackageData> {
+export async function getPackageData(item: Item, root: string): Promise<PackageData> {
   const preTest = protocolDep(item)
   if (preTest)
     return preTest
@@ -32,19 +30,19 @@ export async function getPackageData(item: Item): Promise<PackageData> {
     }
     else {
       // cache.delete(name)
-      reGetVersion(name)
+      reGetVersion(name, root)
     }
     return { version: cacheData.data }
   }
 
   return {
-    version: await reGetVersion(name),
+    version: await reGetVersion(name, root),
   }
 }
 
-async function reGetVersion(name: string) {
+async function reGetVersion(name: string, root: string) {
   try {
-    const root = getWorkspaceFolderPath(window.activeTextEditor)!
+    // const root = getWorkspaceFolderPath(window.activeTextEditor)!
     const data = await version(name, root)
 
     if (data) {

@@ -1,5 +1,5 @@
 import type { TextDocument, TextEditor } from 'vscode'
-import { workspace } from 'vscode'
+import { window, workspace } from 'vscode'
 
 export function getWorkspaceFolderPath(
   documentOrEditor?: TextDocument | TextEditor,
@@ -16,4 +16,8 @@ function isEditor(
   documentOrEditor: TextDocument | TextEditor,
 ): documentOrEditor is TextEditor {
   return (documentOrEditor as any).document != null
+}
+
+export function getRoot() {
+  return getWorkspaceFolderPath(window.activeTextEditor)!
 }

@@ -49,8 +49,8 @@ export async function parseAndDecorate(
   try {
     dependencies = parseDeps(text)
     if (fetchDeps || !fetchedDeps || !fetchedDepsMap) {
-      const data = fetchPackageVersions(dependencies)
-      fetchedDeps = await data[0]
+      const data = await fetchPackageVersions(dependencies)
+      fetchedDeps = data[0]
       fetchedDepsMap = data[1]
     }
     decorate(editor, fetchedDeps)

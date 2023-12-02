@@ -1,25 +1,29 @@
+import { Worker } from 'node:worker_threads'
+import path from 'node:path'
 import { CompletionItem, CompletionItemKind, CompletionList } from 'vscode'
-import PQueue from 'p-queue'
-import { getPackageData } from '../api'
 import compareVersions from '../semver/compareVersion'
 import { sortText } from '../providers/autoCompletion'
 import { statusBarItem } from '../ui/indicators'
+import type { PackageData } from '../api'
+import { getRoot } from '../utils/resolve'
 import type Item from './Item'
 import type Dependency from './Dependency'
 
-const queue = new PQueue({ concurrency: 10 })
+// const queue = new PQueue({ concurrency: 10 })
 
-export function fetchPackageVersions(
+export async function fetchPackageVersions(
   dependencies: Item[],
-): [Promise<Dependency[]>, Map<string, Dependency[]>] {
+): Promise<[Dependency[], Map<string, Dependency[]>]> {
   statusBarItem.setText('👀 Fetching npm')
 
   const responsesMap: Map<string, Dependency[]> = new Map()
 
-  const responses: Promise<Dependency>[] = dependencies.map(
-    async (item) => {
+  const packageData = await fetchPackageData(dependencies)
+
+  const responses = dependencies.map(
+    (item, index) => {
       try {
-        const data = await queue.add(() => getPackageData(item))
+        const data = packageData[index]
         if (!data)
           throw new Error('Get Package information failure')
 
@@ -66,5 +70,21 @@ export function fetchPackageVersions(
     },
   )
 
-  return [Promise.all(responses), responsesMap]
+  return [responses, responsesMap]
+}
+
+function fetchPackageData(
+  dependencies: Item[],
+): Promise<PackageData[]> {
+  return new Promise((resolve, reject) => {
+    const root = getRoot()
+
+    const worker = new Worker(path.resolve(__dirname, 'worker.js'), { workerData: { dependencies, root } })
+    worker.on('message', (data: PackageData[]) => {
+      resolve(data)
+    })
+    worker.on('error', (error) => {
+      reject(error)
+    })
+  })
 }
