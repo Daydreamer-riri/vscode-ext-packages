@@ -2,7 +2,7 @@ import { CompletionItem, CompletionItemKind, CompletionList } from 'vscode'
 import compareVersions from '../semver/compareVersion'
 import { sortText } from '../providers/autoCompletion'
 import { statusBarItem } from '../ui/indicators'
-import type { PackageData } from '../api'
+import { type PackageData, freshChecker } from '../api'
 import { getRoot } from '../utils/resolve'
 import type Item from './Item'
 import type Dependency from './Dependency'
@@ -75,5 +75,9 @@ async function fetchPackageData(
 ): Promise<PackageData[]> {
   const root = getRoot()
 
-  return await getPackageDatas(dependencies, root)
+  const packageDatas = await getPackageDatas(dependencies, root)
+
+  freshChecker.set(false)
+
+  return packageDatas
 }

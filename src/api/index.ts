@@ -5,6 +5,13 @@ import { dumpCache, loadCache } from './cache'
 import { version } from './version'
 import { protocolDep } from './utils'
 
+export const freshChecker = {
+  needFresh: true,
+  set(newVal: boolean) {
+    this.needFresh = newVal
+  },
+}
+
 const cacheInit = Object.entries(loadCache())
 const init = cacheInit.map(([key, { cacheTime, data }]) => {
   return {
@@ -31,10 +38,16 @@ export async function getPackageData(item: Item, root: string): Promise<PackageD
 
   const name = item.key
 
-  // let error: any
   const cacheData: string[] | undefined = cache.get(name)
   if (cacheData) {
     console.log('vscode-packages: use cache', name)
+
+    if (freshChecker.needFresh) {
+      setTimeout(() => {
+        reGetVersion(name, root)
+      }, 10000)
+    }
+
     return { version: cacheData }
   }
 
@@ -49,7 +62,6 @@ export async function getPackageData(item: Item, root: string): Promise<PackageD
 
 async function reGetVersion(name: string, root: string) {
   try {
-    // const root = getWorkspaceFolderPath(window.activeTextEditor)!
     const data = await version(name, root)
 
     if (data) {
