@@ -101,9 +101,8 @@ export function registerListener(context: ExtensionContext) {
     workspace.onDidChangeTextDocument((e) => {
       const { fileName } = e.document
       if (fileName.toLocaleLowerCase().endsWith('package.json')) {
-        // if (!e.document.isDirty)
-        //   listener(window.activeTextEditor)
-        throttledListener(window.activeTextEditor)
+        if (!e.document.isDirty)
+          throttledListener(window.activeTextEditor)
       }
     }),
   )

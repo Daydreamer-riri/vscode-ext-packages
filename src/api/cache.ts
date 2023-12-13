@@ -26,10 +26,14 @@ export function loadCache() {
   return cache
 }
 
-export function dumpCache(cache: Record<string, { cacheTime: number; data: string[] }>, cacheChanged: boolean) {
+export function dumpCache(mCache: Record<string, string[]>, cacheChanged: boolean) {
   if (!cacheChanged)
     return
   try {
+    const cache: Record<string, { cacheTime: number; data: string[] }> = {}
+    for (const [key, val] of Object.entries(mCache))
+      cache[key] = { cacheTime: Date.now(), data: val }
+
     mkdirSync(cacheDir, { recursive: true })
     writeFileSync(cachePath, JSON.stringify(cache), 'utf-8')
     console.log(`cache saved to ${cachePath}`)

@@ -1,3 +1,4 @@
+import NodeCache from 'node-cache'
 import type Item from '../core/Item'
 import { now, ttl } from '../utils/ttl'
 import { dumpCache, loadCache } from './cache'
@@ -5,8 +6,16 @@ import { version } from './version'
 import { protocolDep } from './utils'
 
 const cacheInit = Object.entries(loadCache())
-const cache = new Map<string, { cacheTime: number; data: string[] }>(cacheInit)
-const cacheTTL = 30 * 60_000 // 30min
+const init = cacheInit.map(([key, { cacheTime, data }]) => {
+  return {
+    key,
+    val: data,
+    ttl: ttl(cacheTime),
+  }
+})
+const cache = new NodeCache({ stdTTL: 60 * 10 })
+cache.mset(init)
+// const cacheTTL = 30 * 60_000 // 30min
 
 let cacheChanged = false
 
@@ -23,20 +32,18 @@ export async function getPackageData(item: Item, root: string): Promise<PackageD
   const name = item.key
 
   // let error: any
-  const cacheData = cache.get(name)
+  const cacheData: string[] | undefined = cache.get(name)
   if (cacheData) {
-    if (ttl(cacheData.cacheTime) < cacheTTL) {
-      // console.log('read cache')
-    }
-    else {
-      // cache.delete(name)
-      reGetVersion(name, root)
-    }
-    return { version: cacheData.data }
+    console.log('vscode-packages: use cache', name)
+    return { version: cacheData }
   }
 
+  const version = await reGetVersion(name, root)
+  console.log('vscode-packages: fetch', name)
+  console.log('ttl', cache.getTtl(name))
+
   return {
-    version: await reGetVersion(name, root),
+    version,
   }
 }
 
@@ -46,7 +53,7 @@ async function reGetVersion(name: string, root: string) {
     const data = await version(name, root)
 
     if (data) {
-      cache.set(name, { data, cacheTime: now() })
+      cache.set(name, data)
       cacheChanged = true
       return data
     }
@@ -59,7 +66,6 @@ async function reGetVersion(name: string, root: string) {
 }
 
 export function saveCache() {
-  const cacheContent = Object.fromEntries(cache.entries())
-  delete cacheContent.next
+  const cacheContent: any = cache.mget(cache.keys())
   dumpCache(cacheContent, cacheChanged)
 }

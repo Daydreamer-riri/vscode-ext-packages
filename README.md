@@ -24,6 +24,9 @@ This is packages, an extension for node dependencies. Aims helping developers to
 
 - [x] Use `worker_threads` to avoid blocking the main thread.
 
+## Known Issues
+Any minor issues or glitches you encounter will automatically be resolved when you save your work.
+
 ## Thanks
 
 `packages` is inspired by [crates](https://github.com/serayuzgur/crates), which is an extension for managing Rust dependencies.
