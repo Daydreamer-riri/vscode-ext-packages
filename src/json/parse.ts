@@ -19,7 +19,7 @@ export function parseJson(text: string) {
   const depNames = Object.keys(deps)
 
   const depfieldsMatchs = text.matchAll(depFieldsRe)
-  const ranges = [...depfieldsMatchs].map((match) => {
+  const ranges = [...depfieldsMatchs].map(match => {
     const start = match.index ?? 0
     const end = start + match[0].length
     return { start, end }
@@ -28,14 +28,14 @@ export function parseJson(text: string) {
   const reg = new RegExp(`"(${depNames.join('|')})"([ \\t]*:[ \\t]*)(")(.*?)\\3`, 'g')
 
   const matchs = text.matchAll(reg)
-  const validMatchs = [...matchs].filter((match) => {
+  const validMatchs = [...matchs].filter(match => {
     const { index } = match
     return index !== undefined
       && ranges.some(
         range => index > range.start && index < range.end,
       )
   })
-  const items = validMatchs.map((match) => {
+  const items = validMatchs.map(match => {
     const [origin, key, mid, _, value] = match
     const start = (match.index ?? 0) + key.length + mid.length + 2
     const end = (match.index ?? 0) + origin.length

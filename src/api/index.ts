@@ -1,6 +1,6 @@
 import NodeCache from 'node-cache'
 import type Item from '../core/Item'
-import { now, ttl } from '../utils/ttl'
+import { ttl } from '../utils/ttl'
 import { dumpCache, loadCache } from './cache'
 import { version } from './version'
 import { protocolDep } from './utils'

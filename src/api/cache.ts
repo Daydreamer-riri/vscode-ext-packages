@@ -8,7 +8,7 @@ const cachePath = resolve(cacheDir, 'cache.json')
 const cacheMaxExpire = 7 * 24 * 60 * 60_000 // 7day
 
 export function loadCache() {
-  let cache: Record<string, { cacheTime: number; data: string[] }> = {}
+  let cache: Record<string, { cacheTime: number, data: string[] }> = {}
   if (!existsSync(cachePath))
     return cache
 
@@ -30,7 +30,7 @@ export function dumpCache(mCache: Record<string, string[]>, cacheChanged: boolea
   if (!cacheChanged)
     return
   try {
-    const cache: Record<string, { cacheTime: number; data: string[] }> = {}
+    const cache: Record<string, { cacheTime: number, data: string[] }> = {}
     for (const [key, val] of Object.entries(mCache))
       cache[key] = { cacheTime: Date.now(), data: val }
 

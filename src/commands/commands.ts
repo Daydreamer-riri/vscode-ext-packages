@@ -69,7 +69,7 @@ export const updateAll = commands.registerTextEditorCommand(
       }
       status.inProgress = false
       // Sometimes fails at the first time.
-      editor.document.save().then((a) => {
+      editor.document.save().then(a => {
         if (!a)
           editor.document.save()
       })

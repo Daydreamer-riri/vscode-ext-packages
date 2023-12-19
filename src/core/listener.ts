@@ -86,7 +86,7 @@ export default async function listener(editor: TextEditor | undefined) {
 
 let throttleId: NodeJS.Timeout | undefined
 
-export const throttledListener = (editor: TextEditor | undefined, timeout = 0) => {
+export function throttledListener(editor: TextEditor | undefined, timeout = 0) {
   if (throttleId)
     clearTimeout(throttleId)
   throttleId = setTimeout(() => {
@@ -98,7 +98,7 @@ export const throttledListener = (editor: TextEditor | undefined, timeout = 0) =
 export function registerListener(context: ExtensionContext) {
   context.subscriptions.push(
     window.onDidChangeActiveTextEditor(listener),
-    workspace.onDidChangeTextDocument((e) => {
+    workspace.onDidChangeTextDocument(e => {
       const { fileName } = e.document
       if (fileName.toLocaleLowerCase().endsWith('package.json')) {
         if (!e.document.isDirty)

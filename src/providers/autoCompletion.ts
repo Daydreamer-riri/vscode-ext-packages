@@ -27,7 +27,9 @@ export function registerAutoCompletion(context: ExtensionContext) {
     languages.registerCompletionItemProvider(
       documentSelector,
       new VersionCompletions(),
+      // eslint-disable-next-line antfu/consistent-list-newline
       '\'', '"', '.', '+', '-',
+      // eslint-disable-next-line antfu/consistent-list-newline
       '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
     ),
   )
@@ -60,7 +62,7 @@ export class VersionCompletions implements CompletionItemProvider {
       if (!fetchedDep || !fetchedDep.versions)
         return
 
-      const versionStart = match[0].indexOf(match[2]) + match[2].length + match[3]?.length ?? 0
+      const versionStart = match[0].indexOf(match[2]) + match[2].length + match[3]?.length || 0
       const versionEnd = versionStart + version.length
       if (
         !new Range(
@@ -77,7 +79,7 @@ export class VersionCompletions implements CompletionItemProvider {
         )
 
         let i = 0
-        const completionItems = fetchedDep.versions.map((version) => {
+        const completionItems = fetchedDep.versions.map(version => {
           const item = new CompletionItem(version, CompletionItemKind.Class)
           item.range = range
           item.preselect = i === 0

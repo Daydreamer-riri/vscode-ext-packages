@@ -1,4 +1,5 @@
 import fs from 'node:fs'
+import { Buffer } from 'node:buffer'
 import { describe, expect, it } from 'vitest'
 import { parseJson } from '../../src/json/parse'
 
@@ -31,14 +32,14 @@ const expected = {
 }
     type Keys = keyof typeof expected
 
-describe('Parser Tests', () => {
+describe('parser Tests', () => {
   const jsonFile = Buffer.from(fs.readFileSync('./test/json/package.test.json')).toString()
 
-  it('Read File', () => {
+  it('read File', () => {
     expect(jsonFile).not.toBe(undefined)
   })
 
-  it('Read JSON', () => {
+  it('read JSON', () => {
     const items = parseJson(jsonFile)
 
     expect(items.length).toStrictEqual(Object.keys(expected).length)
@@ -52,7 +53,7 @@ describe('Parser Tests', () => {
     expect(actual.length).toBe(items.length)
   })
 
-  it('Test dependencies', () => {
+  it('test dependencies', () => {
     const items = parseJson(jsonFile)
 
     Object.keys(expected).forEach((key, index) => {

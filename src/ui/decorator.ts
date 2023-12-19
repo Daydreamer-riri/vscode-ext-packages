@@ -11,7 +11,7 @@ export default function decorate(editor: TextEditor, dependencies: Dependency[])
   const pref = loadPref(editor)
 
   const errors: string[] = []
-  const filtered = dependencies.filter((dep) => {
+  const filtered = dependencies.filter(dep => {
     if (dep && !dep.error && (dep.versions && dep.versions.length))
       return dep
     else if (!dep.error)

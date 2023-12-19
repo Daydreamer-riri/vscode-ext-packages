@@ -94,12 +94,12 @@
     "patch": "esno scripts/patch.ts"
   },
   "devDependencies": {
-    "@ririd/eslint-config": "^0.7.0",
+    "@ririd/eslint-config": "^1.0.3",
     "@types/node": "^18.15.11",
     "@types/npm-registry-fetch": "^8.0.4",
     "@types/vscode": "^1.69.0",
     "bumpp": "^9.1.1",
-    "eslint": "^8.45.0",
+    "eslint": "^8.56.0",
     "esno": "^4.0.0",
     "node-cache": "5.1.2",
     "npm-registry-fetch": "^16.1.0",

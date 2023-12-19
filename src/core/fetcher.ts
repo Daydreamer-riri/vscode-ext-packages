@@ -34,15 +34,17 @@ export async function fetchPackageVersions(
           .reverse()
         let i = 0
         const versionCompletionItems = new CompletionList(
-          versions.map((version) => {
+          versions.map(version => {
             const completionItem = new CompletionItem(
               version,
-              CompletionItemKind.Class)
+              CompletionItemKind.Class,
+            )
             completionItem.preselect = i === 0
             completionItem.sortText = sortText(i++)
             return completionItem
           }),
-          true)
+          true,
+        )
         const dependency = {
           item,
           versions,

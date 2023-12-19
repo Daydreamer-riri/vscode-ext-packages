@@ -18,19 +18,14 @@ import type { ReplaceItem } from '../commands/commands'
 import { status } from '../commands/commands'
 import { prefixs } from '../constants'
 
-export const latestVersion = () =>
-  window.createTextEditorDecorationType({
+export function latestVersion() {
+  return window.createTextEditorDecorationType({
     after: {
       margin: '2em',
     },
   })
+}
 
-/**
- * @param editor
- * @param crate
- * @param version
- * @param versions
- */
 export default function decoration(
   editor: TextEditor,
   item: Item,
@@ -55,7 +50,7 @@ export default function decoration(
     const markdown = new MarkdownString('#### Errors ')
     markdown.appendMarkdown('\n')
     // Ignore empty strings
-    error_parts.filter(s => s).forEach((part) => {
+    error_parts.filter(s => s).forEach(part => {
       markdown.appendMarkdown('* ')
       markdown.appendText(part.trim()) // Gets rid of Markdown-breaking spaces, then append text safely escaped.
       markdown.appendMarkdown('\n') // Put the newlines back
@@ -109,7 +104,7 @@ export default function decoration(
         end,
       }
       // decoPositon = + version.length;
-      editor.edit((edit) => {
+      editor.edit(edit => {
         edit.replace(
           new Range(
             editor.document.positionAt(info.start + 1),
