@@ -83,7 +83,7 @@
   },
   "scripts": {
     "build": "tsup --external vscode",
-    "dev": "nr build --watch",
+    "dev": "pnpm run build --watch",
     "lint": "eslint .",
     "vscode:prepublish": "nr build",
     "publish": "vsce publish",
