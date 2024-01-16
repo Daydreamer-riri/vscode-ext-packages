@@ -53,7 +53,6 @@ export async function getPackageData(item: Item, root: string): Promise<PackageD
 
   const version = await reGetVersion(name, root)
   console.log('vscode-packages: fetch', name)
-  console.log('ttl', cache.getTtl(name))
 
   return {
     version,

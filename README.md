@@ -20,10 +20,6 @@ This is packages, an extension for node dependencies. Aims helping developers to
 
 ![preview](./screenshots/preview.gif)
 
-## Roadmap
-
-- [x] Use `worker_threads` to avoid blocking the main thread.
-
 ## Known Issues
 Any minor issues or glitches you encounter will automatically be resolved when you save your work.
 
