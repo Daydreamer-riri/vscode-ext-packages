@@ -18,8 +18,8 @@ function Header(name: string) {
 export async function version(name: string, cwd: string) {
   const registry = await getNpmRegistry(name, cwd)
   try {
-    const data = await fetch.json(name, { registry, fullMetadata: true, headers: Header(name) })
-    const versions = Object.keys(data.versions || {}).filter(v => !v.includes('-'))
+    const data = await fetch.json(name, { registry, fullMetadata: true, headers: Header(name) }) as { versions: { [version: string]: { deprecated: string } } }
+    const versions = Object.keys(data.versions || {}).filter(v => (!v.includes('-') && !data.versions[v].deprecated))
     return versions
   }
   catch {
